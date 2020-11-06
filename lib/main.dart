@@ -1,3 +1,5 @@
+// Uditha Ishan @2020
+
 import 'package:flutter/material.dart';
 import 'sindu_home.dart';
 

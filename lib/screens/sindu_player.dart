@@ -31,11 +31,13 @@ class _SinduPlayerState extends State<SinduPlayer> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                icon: Icon(Icons.skip_previous_sharp),
-                iconSize: 90.0,
-                onPressed: (){
-                },
+              GestureDetector(
+                onTap: () {},
+                child: Icon(
+                    Icons.skip_previous_sharp,
+                    size: 90.0,
+                    color: Colors.white
+                ),
               ),
               GestureDetector(
                 onTap: (){
@@ -48,10 +50,13 @@ class _SinduPlayerState extends State<SinduPlayer> {
                     size: 90.0,
                     color: Colors.white),
               ),
-              Icon(
-                  Icons.skip_next_sharp,
-                  size: 90.0,
-                  color: Colors.white),
+              GestureDetector(
+                onTap: () {},
+                child: Icon(
+                    Icons.skip_next_sharp,
+                    size: 90.0,
+                    color: Colors.white),
+              ),
             ],
           )
         ],

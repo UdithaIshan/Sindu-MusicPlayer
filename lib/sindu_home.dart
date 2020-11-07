@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sindu_music_player/screens/sindu_player.dart';
 import 'package:sindu_music_player/screens/sindu_fav.dart';
 import 'package:sindu_music_player/screens/sindu_list.dart';
-import 'constants.dart';
 
 class SinduHome extends StatefulWidget {
   @override

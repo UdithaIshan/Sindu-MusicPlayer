@@ -13,6 +13,7 @@ class SinduMain extends StatefulWidget {
 class _SinduMainState extends State<SinduMain> {
 
   int _selectedIndex = 0;
+  PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +21,12 @@ class _SinduMainState extends State<SinduMain> {
       body: Row(
         children: [
           NavigationRail(
-            backgroundColor: Colors.redAccent,
             selectedIndex: _selectedIndex,
             labelType: NavigationRailLabelType.selected,
             onDestinationSelected: (index) {
               setState(() {
                 _selectedIndex = index;
+                pageController.animateToPage(index, duration: Duration(milliseconds: 250), curve: Curves.ease);
               });
             },
             destinations: [
@@ -34,9 +35,12 @@ class _SinduMainState extends State<SinduMain> {
               NavigationRailDestination(icon: Icon(Icons.star_border), selectedIcon: Icon(Icons.star), label: Text('Third'),),
             ],
           ),
+          VerticalDivider(thickness: 1, width: 1),
           Expanded(child: PageView(
+            controller: pageController,
+            scrollDirection: Axis.vertical,
             children: [
-              Container(color: Colors.black,),
+              Container(color: Colors.white,),
               Container(color: Colors.blue,),
               Container(color: Colors.greenAccent,)
             ],

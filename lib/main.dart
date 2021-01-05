@@ -37,21 +37,9 @@ class _SinduMainState extends State<SinduMain> {
                     });
                   },
                   destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.favorite_border),
-                      selectedIcon: Icon(Icons.favorite),
-                      label: Text('First'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.bookmark_border),
-                      selectedIcon: Icon(Icons.book),
-                      label: Text('Second'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.star_border),
-                      selectedIcon: Icon(Icons.star),
-                      label: Text('Third'),
-                    ),
+                    NavigationRailDestination(icon: Icon(Icons.play_circle_outline_rounded), selectedIcon: Icon(Icons.play_circle_fill_rounded), label: Text('Now'),),
+                    NavigationRailDestination(icon: Icon(Icons.favorite_border), selectedIcon: Icon(Icons.favorite), label: Text('Favourites'),),
+                    NavigationRailDestination(icon: Icon(Icons.folder_outlined), selectedIcon: Icon(Icons.folder), label: Text('All'),),
                   ],
                 ),
                 VerticalDivider(thickness: 1, width: 1),
@@ -68,9 +56,12 @@ class _SinduMainState extends State<SinduMain> {
               ],
             ),
           ),
+          Divider(
+              height: 1
+          ),
           Container(
-            color: Colors.black,
-            height: 20.0,
+            color: Colors.white,
+            height: 90.0,
           )
         ],
       ),

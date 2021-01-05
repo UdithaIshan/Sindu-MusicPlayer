@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'favourite.dart';
+import "package:font_awesome_flutter/font_awesome_flutter.dart";
 
 void main() => runApp(MaterialApp(
       home: SinduMain(),
@@ -25,9 +25,6 @@ class _SinduMainState extends State<SinduMain> {
             child: Row(
               children: [
                 NavigationRail(
-                  trailing: IconButton(
-                    icon: Icon(Icons.info_outline_rounded),
-                  ),
                   selectedIndex: _selectedIndex,
                   labelType: NavigationRailLabelType.selected,
                   onDestinationSelected: (index) {
@@ -40,6 +37,7 @@ class _SinduMainState extends State<SinduMain> {
                     NavigationRailDestination(icon: Icon(Icons.play_circle_outline_rounded), selectedIcon: Icon(Icons.play_circle_fill_rounded), label: Text('Now'),),
                     NavigationRailDestination(icon: Icon(Icons.favorite_border), selectedIcon: Icon(Icons.favorite), label: Text('Favourites'),),
                     NavigationRailDestination(icon: Icon(Icons.folder_outlined), selectedIcon: Icon(Icons.folder), label: Text('All'),),
+                    NavigationRailDestination(icon: Icon(Icons.settings), selectedIcon: Icon(Icons.settings), label: Text('Settings'),),
                   ],
                 ),
                 VerticalDivider(thickness: 1, width: 1),
@@ -50,6 +48,7 @@ class _SinduMainState extends State<SinduMain> {
                         Container(color: Colors.white,),
                         Container(color: Colors.blueAccent,),
                         Container(color: Colors.yellow,),
+                        Container(color: Colors.blueGrey,),
                       ],
                     ),
                 ),
@@ -60,8 +59,49 @@ class _SinduMainState extends State<SinduMain> {
               height: 1
           ),
           Container(
-            color: Colors.white,
             height: 90.0,
+            child: Row(
+              children: [
+                Expanded(child: Container()),
+                Expanded(child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.caretLeft),
+                      iconSize: 50.0,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.play_circle_outline_rounded),
+                      iconSize: 60.0,
+                    ),
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.caretRight),
+                      iconSize: 50.0,
+                    ),
+                  ],
+                )),
+                Expanded(child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(
+                      Icons.volume_down,
+                      size: 25,
+                      color: Colors.blue,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 50  ,
+                      child: Slider(
+                        min: 0,
+                        max: 100.0,
+                        divisions: 10,
+                        value: 0,
+                      ),
+                    ),
+                  ],
+                ),)
+              ],
+            )
           )
         ],
       ),

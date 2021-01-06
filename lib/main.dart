@@ -1,4 +1,3 @@
-import 'package:file_selector/file_selector.dart';
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'songList.dart';
@@ -66,14 +65,14 @@ class _SinduMainState extends State<SinduMain> {
                         color: Colors.white,
                       ),
                       Container(
-                        color: Colors.blueAccent,
+                        color: Colors.white,
                       ),
                       Container(
-                        color: Colors.blueGrey,
+                        color: Colors.white,
                         child: SongList(),
                       ),
                       Container(
-                        color: Colors.blueGrey,
+                        color: Colors.white,
                       ),
                     ],
                   ),
@@ -95,10 +94,7 @@ class _SinduMainState extends State<SinduMain> {
                         icon: Icon(FontAwesomeIcons.caretLeft),
                         iconSize: 50.0,
                       ),
-                      IconButton(
-                        icon: Icon(Icons.play_circle_outline_rounded),
-                        iconSize: 60.0,
-                      ),
+                      PlayButton(),
                       IconButton(
                         icon: Icon(FontAwesomeIcons.caretRight),
                         iconSize: 50.0,

@@ -1,7 +1,7 @@
 import 'package:file_selector/file_selector.dart';
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
-import 'test.dart';
+import 'songList.dart';
 
 void main() => runApp(MaterialApp(
       home: SinduMain(),
@@ -46,8 +46,8 @@ class _SinduMainState extends State<SinduMain> {
                       label: Text('Favourites'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.book_outlined),
-                      selectedIcon: Icon(Icons.book),
+                      icon: Icon(Icons.folder_outlined),
+                      selectedIcon: Icon(FontAwesomeIcons.solidFolderOpen),
                       label: Text('All'),
                     ),
                     NavigationRailDestination(
@@ -70,7 +70,7 @@ class _SinduMainState extends State<SinduMain> {
                       ),
                       Container(
                         color: Colors.blueGrey,
-                        child: ListTest(),
+                        child: SongList(),
                       ),
                       Container(
                         color: Colors.blueGrey,
@@ -86,14 +86,7 @@ class _SinduMainState extends State<SinduMain> {
               height: 90.0,
               child: Row(
                 children: [
-                  Expanded(child: Container(
-                    child: IconButton(
-                      icon: Icon(FontAwesomeIcons.folderOpen),
-                      onPressed: () {
-
-                      },
-                    ),
-                  )),
+                  Expanded(child: Container()),
                   Expanded(
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

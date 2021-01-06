@@ -1,5 +1,7 @@
+import 'package:file_selector/file_selector.dart';
 import "package:flutter/material.dart";
-import 'favourite.dart';
+import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import 'songList.dart';
 
 void main() => runApp(MaterialApp(
       home: SinduMain(),
@@ -12,8 +14,8 @@ class SinduMain extends StatefulWidget {
 }
 
 class _SinduMainState extends State<SinduMain> {
+  int _widgetIndex = 0;
   int _selectedIndex = 0;
-  PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,64 +26,109 @@ class _SinduMainState extends State<SinduMain> {
             child: Row(
               children: [
                 NavigationRail(
-                  trailing: IconButton(
-                    icon: Icon(Icons.info_outline_rounded),
-                  ),
                   selectedIndex: _selectedIndex,
                   labelType: NavigationRailLabelType.selected,
                   onDestinationSelected: (index) {
                     setState(() {
                       _selectedIndex = index;
-                      pageController.animateToPage(index,
-                          duration: Duration(milliseconds: 250),
-                          curve: Curves.ease);
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Favourite()),);
+                      _widgetIndex = index;
                     });
                   },
                   destinations: [
                     NavigationRailDestination(
+                      icon: Icon(Icons.play_circle_outline_rounded),
+                      selectedIcon: Icon(Icons.play_circle_fill_rounded),
+                      label: Text('Now'),
+                    ),
+                    NavigationRailDestination(
                       icon: Icon(Icons.favorite_border),
                       selectedIcon: Icon(Icons.favorite),
-                      label: Text('First'),
+                      label: Text('Favourites'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.bookmark_border),
-                      selectedIcon: Icon(Icons.book),
-                      label: Text('Second'),
+                      icon: Icon(Icons.folder_outlined),
+                      selectedIcon: Icon(FontAwesomeIcons.solidFolderOpen),
+                      label: Text('All'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.star_border),
-                      selectedIcon: Icon(Icons.star),
-                      label: Text('Third'),
+                      icon: Icon(Icons.settings),
+                      selectedIcon: Icon(Icons.settings),
+                      label: Text('Settings'),
                     ),
                   ],
                 ),
                 VerticalDivider(thickness: 1, width: 1),
                 Expanded(
-                    child: PageView(
-                  allowImplicitScrolling: false,
-                  controller: pageController,
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    Container(
-                      color: Colors.white,
-                    ),
-                    Container(
-                      color: Colors.blue,
-                    ),
-                    Container(
-                      color: Colors.greenAccent,
-                    )
-                  ],
-                )),
+                  child: IndexedStack(
+                    index: _widgetIndex,
+                    children: [
+                      Container(
+                        color: Colors.white,
+                      ),
+                      Container(
+                        color: Colors.blueAccent,
+                      ),
+                      Container(
+                        color: Colors.blueGrey,
+                        child: SongList(),
+                      ),
+                      Container(
+                        color: Colors.blueGrey,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
+          Divider(height: 1),
           Container(
-            color: Colors.black,
-            height: 20.0,
-          )
+              height: 90.0,
+              child: Row(
+                children: [
+                  Expanded(child: Container()),
+                  Expanded(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.caretLeft),
+                        iconSize: 50.0,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.play_circle_outline_rounded),
+                        iconSize: 60.0,
+                      ),
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.caretRight),
+                        iconSize: 50.0,
+                      ),
+                    ],
+                  )),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(
+                          Icons.volume_down,
+                          size: 25,
+                          color: Colors.blue,
+                        ),
+                        Container(
+                          width: 100,
+                          height: 50,
+                          child: Slider(
+                            min: 0,
+                            max: 100.0,
+                            divisions: 10,
+                            value: 0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ))
         ],
       ),
     );

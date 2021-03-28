@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import 'package:sindu_player/player.dart';
 import 'songList.dart';
 
 void main() => runApp(MaterialApp(
@@ -69,7 +70,7 @@ class _SinduMainState extends State<SinduMain> {
                       ),
                       Container(
                         color: Colors.white,
-                        child: SongList(),
+                        // child: SongList(),
                       ),
                       Container(
                         color: Colors.white,

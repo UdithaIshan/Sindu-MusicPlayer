@@ -3,8 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  dart_vlc
   file_selector_windows
-  flutter_audio_desktop
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

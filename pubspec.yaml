@@ -21,7 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  flutter_audio_desktop: ^0.0.8
+  dart_vlc: ">=0.0.1"
   font_awesome_flutter: ^8.11.0
   file_selector: ^0.7.0
   file_selector_windows: ^0.0.1

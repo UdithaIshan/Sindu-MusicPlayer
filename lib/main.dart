@@ -7,7 +7,8 @@ import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'package:play_me/StatefulListTile.dart';
 
-void main() => runApp(MaterialApp(
+void main() => runApp(
+    MaterialApp(
       home: SinduMain(),
       debugShowCheckedModeBanner: false,
     ));
@@ -452,6 +453,7 @@ class _SinduMainState extends State<SinduMain> {
                               color: Colors.blue,
                               onPressed: () {
                                 if (player.general.volume != 0.0) {
+                                  currentVolume = this.player.general.volume;
                                   player.setVolume(0.0);
                                   setState(() {
                                     volumeButton = Icons.volume_off_sharp;

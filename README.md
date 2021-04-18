@@ -1,4 +1,4 @@
-# sindu_player
+# PlayMe
 
 A Music Player
 

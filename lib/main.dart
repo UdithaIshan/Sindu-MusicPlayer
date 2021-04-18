@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:async/async.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'package:play_me/StatefulListTile.dart';
 
-void main() => runApp(MaterialApp(
+
+void main() => runApp(
+    MaterialApp(
       home: SinduMain(),
       debugShowCheckedModeBanner: false,
     ));
@@ -40,8 +41,6 @@ class _SinduMainState extends State<SinduMain> {
 
   double currentVolume = 0.0;
 
-  final AsyncMemoizer _memoizer = AsyncMemoizer();
-
   @override
   void didChangeDependencies() async {
     if (this.init) {
@@ -49,7 +48,7 @@ class _SinduMainState extends State<SinduMain> {
       this.player = await Player.create(id: 0);
       this.player?.currentStream?.listen((current) {
         this.setState(() => this.current = current);
-        getMetas();
+        // getMetas();
       });
       this.currentVolume = this.player.general.volume;
       this.player?.positionStream?.listen((position) {
@@ -58,6 +57,7 @@ class _SinduMainState extends State<SinduMain> {
       this.player?.playbackStream?.listen((playback) {
         if (playback.isPlaying) {
           playButton = Icons.pause;
+
           getMetas();
         } else {
           playButton = Icons.play_arrow;
@@ -101,9 +101,9 @@ class _SinduMainState extends State<SinduMain> {
   void getMetas() async {
     try {
       Media metasMedia = await Media.file(
-          new File(isFavs ? this.favs[player.current.index].resource : this.medias[player.current.index].resource),
+          new File(isFavs ? this.favs[this.player.current.index].resource : this.medias[this.player.current.index].resource),
           parse: true);
-      print(player.current.index);
+      print('in meta ${player.current.index}');
       var jsonString =
           JsonEncoder.withIndent('    ').convert(metasMedia?.metas);
       metas = json.decode(jsonString);
@@ -122,6 +122,18 @@ class _SinduMainState extends State<SinduMain> {
       return meta != null ? meta['title'] : '';
     } catch (e) {
       return "Can't get the data 💔";
+    }
+  }
+
+  String getDurationFormatted(int seconds) {
+    if(seconds % 60 == 0) {
+      int minutes = seconds ~/ 60;
+      return '$minutes:00';
+    }
+    else {
+      int remainder = seconds % 60;
+      int value = seconds ~/ 60;
+      return '$value:${remainder > 9 ? remainder : '0$remainder'}';
     }
   }
 
@@ -277,8 +289,16 @@ class _SinduMainState extends State<SinduMain> {
                                           }
                                           return Text('snapshot.data');
                                         }),
-                                    leading:
-                                        Icon(Icons.remove_circle_outline_sharp),
+                                    trailing:
+                                        IconButton(
+                                            icon: Icon(Icons.remove_circle_outline_sharp),
+                                            onPressed: () {
+                                              favs.removeAt(index);
+                                              setState(() {
+
+                                              });
+                                            },
+                                        ),
                                   );
                                 }),
                           ),
@@ -316,6 +336,7 @@ class _SinduMainState extends State<SinduMain> {
                                       favs: this.favs,
                                       medias: this.medias,
                                       index: index,
+                                      isFavs: this.isFavs,
                                     );
                                   })),
                         ),
@@ -342,35 +363,42 @@ class _SinduMainState extends State<SinduMain> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 20,
-                    width: 300,
-                    child: SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: Colors.red[700],
-                        inactiveTrackColor: Colors.red[100],
-                        trackShape: RectangularSliderTrackShape(),
-                        trackHeight: 4.0,
-                        thumbColor: Colors.redAccent,
-                        thumbShape:
-                            RoundSliderThumbShape(enabledThumbRadius: 12.0),
-                        overlayColor: Colors.red.withAlpha(32),
-                        overlayShape:
-                            RoundSliderOverlayShape(overlayRadius: 10.0),
-                      ),
-                      child: Slider(
-                        min: 0,
-                        max: this.position.duration.inMilliseconds.toDouble(),
-                        value: this.position.position.inMilliseconds.toDouble(),
-                        onChanged: (value) {
-                          this.player.seek(
-                                Duration(milliseconds: value.toInt()),
-                              );
-                        },
-                      ),
-                    ),
-                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(getDurationFormatted(this.position.position.inSeconds)),
+                      Container(
+                        height: 20,
+                        width: 300,
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: Colors.red[700],
+                            inactiveTrackColor: Colors.red[100],
+                            trackShape: RectangularSliderTrackShape(),
+                            trackHeight: 4.0,
+                            thumbColor: Colors.redAccent,
+                            thumbShape:
+                                RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                            overlayColor: Colors.red.withAlpha(32),
+                            overlayShape:
+                                RoundSliderOverlayShape(overlayRadius: 10.0),
+                          ),
+                          child: Slider(
+                            min: 0,
+                            max: this.position.duration.inMilliseconds.toDouble(),
+                            value: this.position.position.inMilliseconds.toDouble(),
+                            onChanged: (value) {
+                              this.player.seek(
+                                    Duration(milliseconds: value.toInt()),
+                                  );
+                            },
+                          ),
+                        ),
+                      ),
+                      Text(getDurationFormatted(this.position.duration.inSeconds)),
+                    ],
+                  ),
+                  Row(                                    // playback controllers
                     children: [
                       Expanded(
                         child: Row(
@@ -442,7 +470,7 @@ class _SinduMainState extends State<SinduMain> {
                           ),
                         ],
                       )),
-                      Expanded(
+                      Expanded(                     // volume controller
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -452,6 +480,7 @@ class _SinduMainState extends State<SinduMain> {
                               color: Colors.blue,
                               onPressed: () {
                                 if (player.general.volume != 0.0) {
+                                  currentVolume = this.player.general.volume;
                                   player.setVolume(0.0);
                                   setState(() {
                                     volumeButton = Icons.volume_off_sharp;

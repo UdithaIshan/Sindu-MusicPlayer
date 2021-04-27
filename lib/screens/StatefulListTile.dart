@@ -1,3 +1,5 @@
+
+
 import 'dart:convert';
 
 import 'package:dart_vlc/dart_vlc.dart';
@@ -6,21 +8,25 @@ import 'dart:io';
 
 import 'package:provider/provider.dart';
 
+import '../PlayerData.dart';
+
 class StatefulListTile extends StatefulWidget {
   StatefulListTile(
-      {this.title, this.favs, this.medias, this.index, this.isFavs});
+      {this.index});
 
-  final String title;
-  final List<Media> medias;
-  final List<Media> favs;
+  // final String title;
+  // final List<Media> medias;
+  // final List<Media> favs;
   final int index;
-  bool isFavs;
 
   @override
   _StatefulListTileState createState() => _StatefulListTileState();
 }
 
 class _StatefulListTileState extends State<StatefulListTile> {
+
+
+
   IconData _icon = Icons.favorite_outline;
 
 
@@ -39,31 +45,33 @@ class _StatefulListTileState extends State<StatefulListTile> {
   @override
   Widget build(BuildContext context) {
 
+    var playerData = context.watch<PlayerData>();
+
     return new Container(
       decoration: new BoxDecoration(
         border: new Border.all(width: 1.0, color: Colors.grey),
       ),
-      child: new ListTile(
-        leading: new IconButton(
-          icon: Icon(_icon),
+      child: ListTile(
+        leading: IconButton(
+          icon: Icon(playerData.favs.contains(playerData.medias[widget?.index]) ? Icons.favorite : Icons.favorite_outline),
           onPressed: () {
-            if (Provider.of<List<Media>>(context, listen: false).contains(widget?.medias[widget?.index])) {
-              Provider.of<List<Media>>(context, listen: false).remove(widget?.medias[widget?.index]);
-              setState(() {
-                _icon = _icon == Icons.favorite_outline ? Icons.favorite : Icons.favorite_outline;
-              });
+            if (playerData.favs.contains(playerData.medias[widget?.index])) {
+              playerData.removeFavourites(widget.index);
+              // setState(() {
+              //   _icon = _icon == Icons.favorite_outline ? Icons.favorite : Icons.favorite_outline;
+              // });
             } else {
-              Provider.of<List<Media>>(context, listen: false).add(widget?.medias[widget?.index]);
-              setState(() {
-                _icon = _icon == Icons.favorite_outline
-                    ? Icons.favorite
-                    : Icons.favorite_outline;
-              });
+              playerData.addFavourites(playerData.medias[widget?.index]);
+              // setState(() {
+              //   _icon = _icon == Icons.favorite_outline
+              //       ? Icons.favorite
+              //       : Icons.favorite_outline;
+              // });
             }
           },
         ),
         title: FutureBuilder(
-            future: getNameOfThis(widget.medias[widget.index]),
+            future: getNameOfThis(playerData.medias[widget.index]),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Text(snapshot.data);
@@ -74,10 +82,10 @@ class _StatefulListTileState extends State<StatefulListTile> {
           icon: Icon(Icons.play_circle_fill_rounded),
           onPressed: () {
             print('in listTile ${widget.index}');
-            widget.isFavs = false;
+            playerData.togglePlayFavourites(false);
             Player player = Provider.of<Player>(context, listen: false);
             player.stop();
-            player.open((widget.medias[widget.index]), autoStart: true);
+            player.open((playerData.medias[widget.index]), autoStart: true);
 
           },
         ),
@@ -85,6 +93,7 @@ class _StatefulListTileState extends State<StatefulListTile> {
     );
   }
 }
+
 
 // import 'package:dart_vlc/dart_vlc.dart';
 // import 'package:flutter/material.dart';

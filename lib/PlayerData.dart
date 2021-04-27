@@ -81,8 +81,13 @@ class PlayerData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFavourites(index) {
-    this.favs.removeAt(index);
+  void removeFavourites(value) {
+    this.favs.remove(value);
+    notifyListeners();
+  }
+
+  void removeFavouritesByIndex(value) {
+    this.favs.removeAt(value);
     notifyListeners();
   }
 

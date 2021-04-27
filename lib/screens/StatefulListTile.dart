@@ -53,10 +53,10 @@ class _StatefulListTileState extends State<StatefulListTile> {
       ),
       child: ListTile(
         leading: IconButton(
-          icon: Icon(playerData.favs.contains(playerData.medias[widget?.index]) ? Icons.favorite : Icons.favorite_outline),
+          icon: Icon(playerData.favs.contains(playerData.medias[widget?.index]) ? Icons.favorite : Icons.favorite_outline, color: Colors.redAccent,),
           onPressed: () {
             if (playerData.favs.contains(playerData.medias[widget?.index])) {
-              playerData.removeFavourites(widget.index);
+              playerData.removeFavourites(playerData.medias[widget?.index]);
               // setState(() {
               //   _icon = _icon == Icons.favorite_outline ? Icons.favorite : Icons.favorite_outline;
               // });
@@ -78,17 +78,17 @@ class _StatefulListTileState extends State<StatefulListTile> {
               }
               return Text('snapshot.data');
             }),
-        trailing: new IconButton(
-          icon: Icon(Icons.play_circle_fill_rounded),
-          onPressed: () {
-            print('in listTile ${widget.index}');
-            playerData.togglePlayFavourites(false);
-            Player player = Provider.of<Player>(context, listen: false);
-            player.stop();
-            player.open((playerData.medias[widget.index]), autoStart: true);
-
-          },
-        ),
+        // trailing: new IconButton(
+        //   icon: Icon(Icons.play_circle_fill_rounded),
+        //   onPressed: () {
+        //     print('in listTile ${widget.index}');
+        //     playerData.togglePlayFavourites(false);
+        //     Player player = Provider.of<Player>(context, listen: false);
+        //     player.stop();
+        //     player.open((playerData.medias[widget.index]), autoStart: true);
+        //
+        //   },
+        // ),
       ),
     );
   }

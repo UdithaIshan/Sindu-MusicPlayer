@@ -33,8 +33,6 @@ class _SinduMainState extends State<SinduMain> {
   PositionState position = new PositionState();
   PlaybackState playback = new PlaybackState();
   GeneralState general = new GeneralState();
-  List<Media> medias = <Media>[];
-  List<Media> favs = <Media>[];
   var metas;
   bool init = true;
   //----------------------------------------------------------------------------
@@ -304,10 +302,10 @@ class _SinduMainState extends State<SinduMain> {
                                     IconButton(
                                       icon: Icon(Icons.remove_circle_outline_sharp),
                                       onPressed: () {
-                                        Provider.of<PlayerData>(context, listen: false).removeFavourites(index);
-                                        // setState(() {
-                                        //
-                                        // });
+                                        Provider.of<PlayerData>(context, listen: false).removeFavouritesByIndex(index);
+                                        setState(() {
+
+                                        });
                                       },
                                     ),
                                   );
@@ -353,13 +351,44 @@ class _SinduMainState extends State<SinduMain> {
                       ),
                       Container(
                         color: Colors.white,
-                        child: IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            player.stop();
-                            setState(() {});
-                          },
-                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  width: 300,
+                                  height: 300,
+                                  child: Card(
+                                    child: Column(
+                                      children: [
+                                        Text('Set Playback Rate'),
+                                        Text('Current Rate: ${this.player.general.rate}'),
+                                        Slider(
+                                          min: 0.0,
+                                          max: 2.0,
+                                          divisions: 4,
+                                          value: player?.general.rate ?? 1.0,
+                                          onChanged: (value) {
+                                            this.player.setRate(value);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              Container(
+                                width: 300,
+                                height: 300,
+                                child: Card(
+                                    child: Text('Coming Soon'),
+                                ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
                       ),
                     ],
                   ),

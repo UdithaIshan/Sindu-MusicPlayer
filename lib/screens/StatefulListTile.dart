@@ -29,6 +29,7 @@ class _StatefulListTileState extends State<StatefulListTile> {
                 : Icons.favorite_outline,
             color: Colors.redAccent,
           ),
+          splashRadius: 20,
           onPressed: () {
             if (playerData.favs.contains(playerData.medias[widget?.index])) {
               playerData.removeFavourites(playerData.medias[widget?.index]);

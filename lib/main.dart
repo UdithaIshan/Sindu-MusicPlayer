@@ -6,7 +6,7 @@ import 'package:file_selector_platform_interface/file_selector_platform_interfac
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'package:play_me/models/playerData.dart';
-import 'package:play_me/screens/statefulListTile.dart';
+import 'package:play_me/screens/StatefulListTile.dart';
 import 'package:play_me/utils/core.dart';
 import 'package:play_me/utils/window.dart';
 import 'package:provider/provider.dart';
@@ -39,15 +39,14 @@ class _PlayMeState extends State<PlayMe> {
   int _widgetIndex = 0;
   int _selectedIndex = 0;
 
-  // player config--------------------------------------------------------------
-  // Player player;
-  CurrentState current = new CurrentState();
+  // player configurations------------------------------------------------------
+  // CurrentState current = new CurrentState();
   PositionState position = new PositionState();
   PlaybackState playback = new PlaybackState();
-  GeneralState general = new GeneralState();
-  var metas;
-  bool init = true;
+  // GeneralState general = new GeneralState();
   double currentVolume = 0.0;
+  bool init = true;
+  var metas;
   //----------------------------------------------------------------------------
 
   IconData playButton = Icons.play_arrow;
@@ -70,14 +69,11 @@ class _PlayMeState extends State<PlayMe> {
         });
       } catch (e) {}
 
-      // Provider.of<PlayerData>(context, listen: false).player?.currentStream?.listen((current) {
-      //   this.setState(() => this.current = current);
-      //
-      // });
       this.currentVolume = Provider.of<PlayerData>(context, listen: false).player.general.volume;
       Provider.of<PlayerData>(context, listen: false).player.positionStream?.listen((position) {
         this.setState(() => this.position = position);
       });
+
       Provider.of<PlayerData>(context, listen: false).player.playbackStream?.listen((playback) {
         if (playback.isPlaying) {
           playButton = Icons.pause;
@@ -87,9 +83,7 @@ class _PlayMeState extends State<PlayMe> {
         }
         this.setState(() => this.playback = playback);
       });
-      // Provider.of<PlayerData>(context, listen: false).player.generateStream?.listen((general) {
-      //   this.setState(() => this.general = general);
-      // });
+
       this.setState(() {});
     }
     this.init = false;
@@ -131,28 +125,6 @@ class _PlayMeState extends State<PlayMe> {
       print(e);
     }
   }
-
-  // Future<String> getNameOfThis(Media media) async {
-  //   try {
-  //     Media metaMedia = await Media.file(new File(media.resource), parse: true);
-  //     var jsonString = JsonEncoder.withIndent('    ').convert(metaMedia?.metas);
-  //     var meta = json.decode(jsonString);
-  //     return meta != null ? meta['title'] : '';
-  //   } catch (e) {
-  //     return "Can't get the data 💔";
-  //   }
-  // }
-
-  // String getDurationFormatted(int seconds) {
-  //   if (seconds % 60 == 0) {
-  //     int minutes = seconds ~/ 60;
-  //     return '$minutes:00';
-  //   } else {
-  //     int remainder = seconds % 60;
-  //     int value = seconds ~/ 60;
-  //     return '$value:${remainder > 9 ? remainder : '0$remainder'}';
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -248,9 +220,6 @@ class _PlayMeState extends State<PlayMe> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            // SizedBox(
-                                            //   height: 100,
-                                            // ),
                                             Text(
                                               metas != null
                                                   ? metas['title']
@@ -269,12 +238,7 @@ class _PlayMeState extends State<PlayMe> {
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
-                                            ),
-                                            // Text(
-                                            //   metas != null ? metas['genre'] : '',
-                                            //   style: TextStyle(
-                                            //       fontWeight: FontWeight.bold),
-                                            // ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -296,13 +260,8 @@ class _PlayMeState extends State<PlayMe> {
                                       playerData
                                           .togglePlayFavourites(true);
                                       playerData.player.open(
-                                          new Playlist(
-                                              medias: playerData
-                                                  .favs),
+                                          new Playlist(medias: playerData.favs),
                                           autoStart: true);
-                                      // setState(() {
-                                      //   playButton = Icons.pause;
-                                      // });
                                     }),
                               ],
                             ),
@@ -365,9 +324,6 @@ class _PlayMeState extends State<PlayMe> {
                                               medias: playerData
                                                   .medias),
                                           autoStart: true);
-                                      // setState(() {
-                                      //   playButton = Icons.pause;
-                                      // });
                                     }),
                               ],
                             ),
@@ -378,14 +334,10 @@ class _PlayMeState extends State<PlayMe> {
                                         .length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return StatefulListTile(
-                                        // title: Provider.of<PlayerData>(context).medias[index].resource,
-                                        // favs: this.favs,
-                                        // medias: this.medias,
-                                        index: index,
-                                        // isFavs: this.isFavs,
-                                      );
-                                    })),
+                                      return StatefulListTile(index: index);
+                                    }
+                                    )
+                            ),
                           ),
                         ),
                         Container(
@@ -430,7 +382,8 @@ class _PlayMeState extends State<PlayMe> {
                                   ],
                                 ),
                               ],
-                            )),
+                            )
+                        ),
                       ],
                     ),
                   ),
@@ -534,7 +487,6 @@ class _PlayMeState extends State<PlayMe> {
                                     playerData
                                         .favs
                                         .isNotEmpty) {
-                                  // getMetas(this.player);
                                   if (playback.isPlaying) {
                                     playerData.player.pause();
                                   } else {
@@ -599,8 +551,6 @@ class _PlayMeState extends State<PlayMe> {
                                   value: playerData.player?.general?.volume ?? 0.5,
                                   onChanged: (value) {
                                     playerData.player.setVolume(value);
-                                    // setState(() {
-                                    // });
                                   },
                                 ),
                               ),

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(sindu_player LANGUAGES CXX)
 
-set(BINARY_NAME "sindu_player")
+set(BINARY_NAME "PlayMe")
 
 cmake_policy(SET CMP0063 NEW)
 

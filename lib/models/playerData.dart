@@ -10,6 +10,7 @@ class PlayerData extends ChangeNotifier {
   List<Media> favs = <Media>[];
   bool playFavourites = false;
   Player player;
+  PlaylistMode playlistMode = PlaylistMode.single;
 
   // add files to favourite list
   void addFavourites(value) {
@@ -32,5 +33,10 @@ class PlayerData extends ChangeNotifier {
   // set whether player is playing in favourites list or not
   void togglePlayFavourites(value) {
     this.playFavourites = value;
+  }
+
+  void togglePlayListMode(value) {
+    this.player.setPlaylistMode(value);
+    this.playlistMode = value;
   }
 }

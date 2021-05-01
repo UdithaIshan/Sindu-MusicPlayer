@@ -11,21 +11,25 @@ class PlayerData extends ChangeNotifier {
   bool playFavourites = false;
   Player player;
 
+  // add files to favourite list
   void addFavourites(value) {
     this.favs.add(value);
     notifyListeners();
   }
 
+  // remove files from favourite list
   void removeFavourites(value) {
     this.favs.remove(value);
     notifyListeners();
   }
 
-  void removeFavouritesByIndex(value) {
-    this.favs.removeAt(value);
+  // remove files from favourite list using index
+  void removeFavouritesByIndex(index) {
+    this.favs.removeAt(index);
     notifyListeners();
   }
 
+  // set whether player is playing in favourites list or not
   void togglePlayFavourites(value) {
     this.playFavourites = value;
   }

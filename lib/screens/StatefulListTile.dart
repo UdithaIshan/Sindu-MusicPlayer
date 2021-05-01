@@ -13,10 +13,8 @@ class StatefulListTile extends StatefulWidget {
 }
 
 class _StatefulListTileState extends State<StatefulListTile> {
-
   @override
   Widget build(BuildContext context) {
-
     var playerData = context.watch<PlayerData>();
 
     return new Container(
@@ -25,7 +23,12 @@ class _StatefulListTileState extends State<StatefulListTile> {
       ),
       child: ListTile(
         leading: IconButton(
-          icon: Icon(playerData.favs.contains(playerData.medias[widget?.index]) ? Icons.favorite : Icons.favorite_outline, color: Colors.redAccent,),
+          icon: Icon(
+            playerData.favs.contains(playerData.medias[widget?.index])
+                ? Icons.favorite
+                : Icons.favorite_outline,
+            color: Colors.redAccent,
+          ),
           onPressed: () {
             if (playerData.favs.contains(playerData.medias[widget?.index])) {
               playerData.removeFavourites(playerData.medias[widget?.index]);
@@ -54,7 +57,6 @@ class _StatefulListTileState extends State<StatefulListTile> {
         //
         //   },
         // ),
-
       ),
     );
   }

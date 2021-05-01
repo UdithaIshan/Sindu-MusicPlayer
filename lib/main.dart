@@ -138,6 +138,12 @@ class _PlayMeState extends State<PlayMe> {
   }
 
   @override
+  void dispose() {
+    Provider.of<PlayerData>(context, listen: false).player.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var playerData = context.watch<PlayerData>();
 
@@ -222,7 +228,7 @@ class _PlayMeState extends State<PlayMe> {
                                                 ? Uri.decodeComponent(
                                                         metas['artworkUrl'])
                                                     .replaceAll('file:///', '')
-                                                : 'assets/images/Sindu.gif'),
+                                                : 'assets/images/PlayMeLogo.png'),
                                             width: 300,
                                             height: 300,
                                           )),
@@ -314,7 +320,7 @@ class _PlayMeState extends State<PlayMe> {
                                             Icons.remove_circle_outline_sharp,
                                           ),
                                           splashRadius: 20,
-                                          tooltip: 'Remove from favourites',
+                                          // tooltip: 'Remove from favourites',
                                           onPressed: () {
                                             playerData
                                                 .removeFavouritesByIndex(index);

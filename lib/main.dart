@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
 import "package:flutter/material.dart";
+import 'package:flutter/services.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'package:play_me/models/playerData.dart';
 import 'package:play_me/screens/StatefulListTile.dart';
@@ -49,7 +51,8 @@ class _PlayMeState extends State<PlayMe> {
   var metas;
   List<Device> devices = <Device>[];
   //----------------------------------------------------------------------------
-
+  ByteData clockData;
+  Uint8List clockBytes;
   IconData playButton = Icons.play_arrow;
   IconData favButton = Icons.favorite_outline;
   IconData volumeButton = Icons.volume_up_sharp;
@@ -60,6 +63,9 @@ class _PlayMeState extends State<PlayMe> {
   void didChangeDependencies() async {
     if (this.init) {
       super.didChangeDependencies();
+       clockData = await rootBundle.load('assets/images/PlayMeLogo.png');
+       clockBytes = clockData.buffer.asUint8List();
+
       this.devices = await Devices.all;
       // check persistent store for saved favourites
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -223,15 +229,20 @@ class _PlayMeState extends State<PlayMe> {
                                       child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(500.0),
-                                          child: Image.file(
-                                            File(metas != null
-                                                ? Uri.decodeComponent(
+                                          child: metas != null ? Image.file(
+                                            File(Uri.decodeComponent(
                                                         metas['artworkUrl'])
                                                     .replaceAll('file:///', '')
-                                                : 'assets/images/PlayMeLogo.png'),
+                                                ),
                                             width: 300,
                                             height: 300,
-                                          )),
+                                          ) :
+                                          Image(
+                                            width: 300,
+                                            height: 300,
+                                            image: AssetImage('assets/images/PlayMeLogo.png'),
+                                          ),
+                                      ),
                                     ),
                                     Container(
                                       child: Flexible(

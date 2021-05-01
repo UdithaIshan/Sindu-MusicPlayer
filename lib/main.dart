@@ -18,6 +18,7 @@ void main() {
     create: (context) => PlayerData(),
     child: MaterialApp(
       home: PlayMe(),
+      theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
     ),
   ));
@@ -53,7 +54,7 @@ class _PlayMeState extends State<PlayMe> {
   IconData favButton = Icons.favorite_outline;
   IconData volumeButton = Icons.volume_up_sharp;
   IconData playListMode = Icons.repeat_sharp;
-  Color repeatColor = Colors.white;
+  Color repeatColor = Colors.black26;
 
   @override
   void didChangeDependencies() async {
@@ -146,11 +147,17 @@ class _PlayMeState extends State<PlayMe> {
         width: 1,
         child: Column(
           children: [
-            Row(children: [RightSide()]),
+            Row(children: [LeftSide(), RightSide()]),
             Expanded(
               child: Row(
                 children: [
                   NavigationRail(
+                    selectedLabelTextStyle: TextStyle(
+                      color: Colors.white
+                    ),
+                    selectedIconTheme: IconThemeData(
+                        color: Colors.white
+                    ),
                     selectedIndex: _selectedIndex,
                     labelType: NavigationRailLabelType.selected,
                     onDestinationSelected: (index) {
@@ -182,13 +189,12 @@ class _PlayMeState extends State<PlayMe> {
                       ),
                     ],
                   ),
-                  VerticalDivider(thickness: 1, width: 1),
+                  // VerticalDivider(thickness: 1, width: 1),
                   Expanded(
                     child: IndexedStack(
                       index: _widgetIndex,
                       children: [
                         Container(
-                          color: Colors.white,
                           child: Container(
                             padding:
                                 EdgeInsets.only(left: 20, top: 0, right: 20),
@@ -259,19 +265,27 @@ class _PlayMeState extends State<PlayMe> {
                           ),
                         ),
                         Container(
-                          color: Colors.white,
                           child: Scaffold(
-                            appBar: AppBar(
-                              actions: [
-                                ElevatedButton(
-                                    child: const Text('Play Favourites'),
-                                    onPressed: () {
-                                      playerData.togglePlayFavourites(true);
-                                      playerData.player.open(
-                                          new Playlist(medias: playerData.favs),
-                                          autoStart: true);
-                                    }),
-                              ],
+                            appBar: PreferredSize(
+                              preferredSize: Size.fromHeight(30.0),
+                              child: AppBar(
+                                elevation: 0,
+                                backgroundColor: Color(0xff303030),
+                                actions: [
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xffeb1555),
+                                      ),
+                                      child: const Text('Play Favourites'),
+                                      onPressed: () {
+                                        playerData.togglePlayFavourites(true);
+                                        playerData.player.open(
+                                            new Playlist(medias: playerData.favs),
+                                            autoStart: true);
+                                      }),
+                                  SizedBox(width: 20,)
+                                ],
+                              ),
                             ),
                             body: Container(
                               child: ListView.builder(
@@ -281,27 +295,32 @@ class _PlayMeState extends State<PlayMe> {
                                     if (playerData.favs.isEmpty) {
                                       return null;
                                     }
-                                    return ListTile(
-                                      title: FutureBuilder(
-                                          future: Core.getNameOfThis(
-                                              playerData.favs[index]),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              return Text(snapshot.data);
-                                            }
-                                            return Text('snapshot.data');
-                                          }),
-                                      trailing: IconButton(
-                                        icon: Icon(
-                                          Icons.remove_circle_outline_sharp,
+                                    return Container(
+                                      decoration: new BoxDecoration(
+                                        border: new Border.all(width: 0.04, color: Colors.grey),
+                                      ),
+                                      child: ListTile(
+                                        title: FutureBuilder(
+                                            future: Core.getNameOfThis(
+                                                playerData.favs[index]),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Text(snapshot.data);
+                                              }
+                                              return Text('snapshot.data');
+                                            }),
+                                        trailing: IconButton(
+                                          icon: Icon(
+                                            Icons.remove_circle_outline_sharp,
+                                          ),
+                                          splashRadius: 20,
+                                          tooltip: 'Remove from favourites',
+                                          onPressed: () {
+                                            playerData
+                                                .removeFavouritesByIndex(index);
+                                            setState(() {});
+                                          },
                                         ),
-                                        splashRadius: 20,
-                                        tooltip: 'Remove from favourites',
-                                        onPressed: () {
-                                          playerData
-                                              .removeFavouritesByIndex(index);
-                                          setState(() {});
-                                        },
                                       ),
                                     );
                                   }),
@@ -311,23 +330,36 @@ class _PlayMeState extends State<PlayMe> {
                         Container(
                           color: Colors.white,
                           child: Scaffold(
-                            appBar: AppBar(
-                              actions: [
-                                ElevatedButton(
-                                  child: const Text('Open files'),
-                                  onPressed: () => _openMediaFile(
-                                      context, playerData.medias),
-                                ),
-                                ElevatedButton(
-                                    child: const Text('Play All'),
-                                    onPressed: () {
-                                      playerData.togglePlayFavourites(false);
-                                      playerData.player.open(
-                                          new Playlist(
-                                              medias: playerData.medias),
-                                          autoStart: true);
-                                    }),
-                              ],
+                            appBar: PreferredSize(
+                              preferredSize: Size.fromHeight(30.0),
+                              child: AppBar(
+                                elevation: 0,
+                                backgroundColor: Color(0xff303030),
+                                actions: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Color(0xffeb1555),
+                                    ),
+                                    child: const Text('Open files'),
+                                    onPressed: () => _openMediaFile(
+                                        context, playerData.medias),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Color(0xffeb1555),
+                                    ),
+                                      child: const Text('Play All'),
+                                      onPressed: () {
+                                        playerData.togglePlayFavourites(false);
+                                        playerData.player.open(
+                                            new Playlist(
+                                                medias: playerData.medias),
+                                            autoStart: true);
+                                      }),
+                                  SizedBox(width: 20,)
+                                ],
+                              ),
                             ),
                             body: Container(
                                 child: ListView.builder(
@@ -339,7 +371,7 @@ class _PlayMeState extends State<PlayMe> {
                           ),
                         ),
                         Container(
-                            color: Colors.white,
+                            color: Color(0xff303030),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -370,17 +402,31 @@ class _PlayMeState extends State<PlayMe> {
                                             SizedBox(
                                               height: 50,
                                             ),
-                                            Slider(
-                                              min: 0.0,
-                                              max: 2.0,
-                                              divisions: 4,
-                                              value: playerData
-                                                      .player?.general?.rate ??
-                                                  1.0,
-                                              onChanged: (value) {
-                                                playerData.player
-                                                    .setRate(value);
-                                              },
+                                            SliderTheme(
+                                              data: SliderTheme.of(context).copyWith(
+                                                activeTrackColor: Color(0xffeb1555),
+                                                inactiveTrackColor: Colors.red[200],
+                                                trackShape: RectangularSliderTrackShape(),
+                                                trackHeight: 4.0,
+                                                thumbColor: Color(0xffeb1555),
+                                                thumbShape: RoundSliderThumbShape(
+                                                    enabledThumbRadius: 8.0),
+                                                overlayColor: Colors.cyan.withAlpha(32),
+                                                overlayShape:
+                                                RoundSliderOverlayShape(overlayRadius: 10.0),
+                                              ),
+                                              child: Slider(
+                                                min: 0.0,
+                                                max: 2.0,
+                                                divisions: 4,
+                                                value: playerData
+                                                        .player?.general?.rate ??
+                                                    1.0,
+                                                onChanged: (value) {
+                                                  playerData.player
+                                                      .setRate(value);
+                                                },
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -437,8 +483,9 @@ class _PlayMeState extends State<PlayMe> {
                 ],
               ),
             ),
-            Divider(height: 1),
+            Divider(height: 2),
             Container(
+              color: Colors.blueGrey.shade800,
               padding: EdgeInsets.all(10),
                 height: 110.0,
                 child: Column(
@@ -454,11 +501,11 @@ class _PlayMeState extends State<PlayMe> {
                           width: 300,
                           child: SliderTheme(
                             data: SliderTheme.of(context).copyWith(
-                              activeTrackColor: Colors.red[700],
-                              inactiveTrackColor: Colors.red[100],
+                              activeTrackColor: Color(0xffeb1555),
+                              inactiveTrackColor: Colors.red[200],
                               trackShape: RectangularSliderTrackShape(),
                               trackHeight: 4.0,
-                              thumbColor: Colors.redAccent,
+                              thumbColor: Color(0xffeb1555),
                               thumbShape: RoundSliderThumbShape(
                                   enabledThumbRadius: 9.0),
                               overlayColor: Colors.red.withAlpha(32),
@@ -503,7 +550,7 @@ class _PlayMeState extends State<PlayMe> {
                                   if(playerData.playlistMode == PlaylistMode.single) {
                                     playerData.togglePlayListMode(PlaylistMode.repeat);
                                     setState(() {
-                                      repeatColor = Colors.grey.shade400;
+                                      repeatColor = Colors.grey;
                                       playListMode = Icons.repeat_one_sharp;
                                     });
                                   }
@@ -516,7 +563,7 @@ class _PlayMeState extends State<PlayMe> {
                                   else if(playerData.playlistMode == PlaylistMode.loop) {
                                     playerData.togglePlayListMode(PlaylistMode.single);
                                     setState(() {
-                                      repeatColor = Colors.white;
+                                      repeatColor = Colors.black26;
                                       playListMode = Icons.repeat_sharp;
                                     });
                                     }
@@ -534,7 +581,7 @@ class _PlayMeState extends State<PlayMe> {
                                 constraints: BoxConstraints(maxWidth: 50),
                                 onPressed: () => playerData.player.stop(),
                                 elevation: 2.0,
-                                fillColor: Colors.white,
+                                fillColor: Colors.black26,
                                 child: Icon(
                                   Icons.stop,
                                   size: 20.0,
@@ -553,7 +600,7 @@ class _PlayMeState extends State<PlayMe> {
                               constraints: BoxConstraints(maxWidth: 50),
                               onPressed: () => playerData.player.back(),
                               elevation: 2.0,
-                              fillColor: Colors.white,
+                              fillColor: Colors.black26,
                               child: Icon(
                                 FontAwesomeIcons.caretLeft,
                                 size: 25.0,
@@ -573,7 +620,7 @@ class _PlayMeState extends State<PlayMe> {
                                 }
                               },
                               elevation: 2.0,
-                              fillColor: Colors.white,
+                              fillColor: Colors.black26,
                               child: Icon(
                                 playButton,
                                 size: 30.0,
@@ -585,7 +632,7 @@ class _PlayMeState extends State<PlayMe> {
                               constraints: BoxConstraints(maxWidth: 50),
                               onPressed: () => playerData.player.next(),
                               elevation: 2.0,
-                              fillColor: Colors.white,
+                              fillColor: Colors.black26,
                               child: Icon(
                                 FontAwesomeIcons.caretRight,
                                 size: 25.0,
@@ -603,7 +650,6 @@ class _PlayMeState extends State<PlayMe> {
                               IconButton(
                                 icon: Icon(volumeButton),
                                 iconSize: 25,
-                                color: Colors.black,
                                 splashRadius: 20,
                                 onPressed: () {
                                   if (playerData.player.general.volume != 0.0) {
@@ -626,11 +672,11 @@ class _PlayMeState extends State<PlayMe> {
                                 height: 50,
                                 child: SliderTheme(
                                   data: SliderTheme.of(context).copyWith(
-                                    activeTrackColor: Colors.cyan[600],
-                                    inactiveTrackColor: Colors.cyan[100],
+                                    activeTrackColor: Color(0xffeb1555),
+                                    inactiveTrackColor: Colors.red[200],
                                     trackShape: RectangularSliderTrackShape(),
                                     trackHeight: 4.0,
-                                    thumbColor: Colors.cyan,
+                                    thumbColor: Color(0xffeb1555),
                                     thumbShape: RoundSliderThumbShape(
                                         enabledThumbRadius: 8.0),
                                     overlayColor: Colors.cyan.withAlpha(32),
@@ -640,7 +686,6 @@ class _PlayMeState extends State<PlayMe> {
                                   child: Slider(
                                     min: 0.0,
                                     max: 1.0,
-                                    divisions: 10,
                                     value: playerData.player?.general?.volume ?? 0.5,
                                     onChanged: (value) {
                                       playerData.player.setVolume(value);

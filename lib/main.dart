@@ -188,9 +188,7 @@ class _PlayMeState extends State<PlayMe> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  this.playback.isPlaying
-                                      ? 'Now Playing'
-                                      : 'Welcome to PlayMe',
+                                  this.playback.isPlaying ? 'Now Playing' : 'Welcome to PlayMe',
                                   style: TextStyle(
                                       fontSize: 30, fontFamily: 'Courgette'),
                                 ),
@@ -203,11 +201,7 @@ class _PlayMeState extends State<PlayMe> {
                                           borderRadius:
                                               BorderRadius.circular(500.0),
                                           child: Image.file(
-                                            File(metas != null
-                                                ? Uri.decodeComponent(
-                                                        metas['artworkUrl'])
-                                                    .replaceAll('file:///', '')
-                                                : 'assets/images/Sindu.gif'),
+                                            File(metas != null ? Uri.decodeComponent(metas['artworkUrl']).replaceAll('file:///', '') : 'assets/images/Sindu.gif'),
                                             width: 300,
                                             height: 300,
                                           )),
@@ -221,9 +215,7 @@ class _PlayMeState extends State<PlayMe> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              metas != null
-                                                  ? metas['title']
-                                                  : 'PlayMe with your favourites!',
+                                              metas != null ? metas['title'] : 'PlayMe with your favourites!',
                                               style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold),
@@ -232,9 +224,7 @@ class _PlayMeState extends State<PlayMe> {
                                               height: 19,
                                             ),
                                             Text(
-                                              metas != null
-                                                  ? metas['artist']
-                                                  : '',
+                                              metas != null ? metas['artist'] : '',
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
@@ -279,9 +269,7 @@ class _PlayMeState extends State<PlayMe> {
                                     }
                                     return ListTile(
                                       title: FutureBuilder(
-                                          future: Core.getNameOfThis(
-                                              playerData
-                                                  .favs[index]),
+                                          future: Core.getNameOfThis(playerData.favs[index]),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
                                               return Text(snapshot.data);
@@ -292,8 +280,7 @@ class _PlayMeState extends State<PlayMe> {
                                         icon: Icon(
                                             Icons.remove_circle_outline_sharp),
                                         onPressed: () {
-                                          playerData
-                                              .removeFavouritesByIndex(index);
+                                          playerData.removeFavouritesByIndex(index);
                                           setState(() {});
                                         },
                                       ),
@@ -309,34 +296,22 @@ class _PlayMeState extends State<PlayMe> {
                               actions: [
                                 ElevatedButton(
                                   child: const Text('Open files'),
-                                  onPressed: () => _openMediaFile(
-                                      context,
-                                      playerData
-                                          .medias),
+                                  onPressed: () => _openMediaFile(context, playerData.medias),
                                 ),
                                 ElevatedButton(
                                     child: const Text('Play All'),
                                     onPressed: () {
-                                      playerData
-                                          .togglePlayFavourites(false);
-                                      playerData.player.open(
-                                          new Playlist(
-                                              medias: playerData
-                                                  .medias),
-                                          autoStart: true);
+                                      playerData.togglePlayFavourites(false);
+                                      playerData.player.open(new Playlist(medias: playerData.medias), autoStart: true);
                                     }),
                               ],
                             ),
                             body: Container(
                                 child: ListView.builder(
-                                    itemCount: playerData
-                                        .medias
-                                        .length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
+                                    itemCount: playerData.medias.length,
+                                    itemBuilder: (BuildContext context, int index) {
                                       return StatefulListTile(index: index);
-                                    }
-                                    )
+                                    })
                             ),
                           ),
                         ),
@@ -481,12 +456,7 @@ class _PlayMeState extends State<PlayMe> {
                             ),
                             RawMaterialButton(
                               onPressed: () {
-                                if (playerData
-                                        .medias
-                                        .isNotEmpty ||
-                                    playerData
-                                        .favs
-                                        .isNotEmpty) {
+                                if (playerData.medias.isNotEmpty || playerData.favs.isNotEmpty) {
                                   if (playback.isPlaying) {
                                     playerData.player.pause();
                                   } else {

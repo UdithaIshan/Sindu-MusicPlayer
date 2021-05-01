@@ -19,7 +19,7 @@ class _StatefulListTileState extends State<StatefulListTile> {
 
     return new Container(
       decoration: new BoxDecoration(
-        border: new Border.all(width: 1.0, color: Colors.grey),
+        border: new Border.all(width: 0.04, color: Colors.grey),
       ),
       child: ListTile(
         leading: IconButton(

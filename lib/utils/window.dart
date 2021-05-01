@@ -13,23 +13,25 @@ class LeftSide extends StatelessWidget {
         width: 200,
         child: Container(
             decoration: BoxDecoration(
-        gradient: LinearGradient(
-        begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [backgroundStartColor, backgroundEndColor],
-            stops: [0.0, 1.0]),
-    ),
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [backgroundStartColor, backgroundEndColor],
+                  stops: [0.0, 1.0]),
+            ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                WindowTitleBarBox(child: Text('PlayMe')),
-                // Expanded(child: Container())
+                WindowTitleBarBox(child: Center(child: Text('PlayMe Music Player', ))),
               ],
             )));
   }
 }
 
 const backgroundStartColor = Color(0xFF6c939f);
-const backgroundEndColor = Color(0xFF38616d);
+const backgroundEndColor = Color(0xFF00296f);
+// const backgroundStartColor = Colors.grey;
+// const backgroundEndColor = Colors.white;
 
 class RightSide extends StatelessWidget {
   @override
@@ -46,9 +48,9 @@ class RightSide extends StatelessWidget {
             child: Column(children: [
               WindowTitleBarBox(
                   child: Row(children: [
-                    Expanded(child: MoveWindow()),
-                    WindowButtons()
-                  ])),
+                Expanded(child: MoveWindow()),
+                WindowButtons()
+              ])),
             ])));
   }
 }
@@ -72,17 +74,20 @@ class WindowButtons extends StatelessWidget {
     return Row(
       children: [
         MinimizeWindowButton(colors: buttonColors),
-        MaximizeWindowButton(colors: buttonColors),
         CloseWindowButton(
-            colors: closeButtonColors,
-            onPressed: () async {
-              List<String> favouriteMediaPaths = <String>[];
-              Provider.of<PlayerData>(context, listen: false).favs.forEach((element) {favouriteMediaPaths.add(element.resource);});
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.setStringList('favourites', favouriteMediaPaths);
-              appWindow.close();
-            },
-          ),
+          colors: closeButtonColors,
+          onPressed: () async {
+            List<String> favouriteMediaPaths = <String>[];
+            Provider.of<PlayerData>(context, listen: false)
+                .favs
+                .forEach((element) {
+              favouriteMediaPaths.add(element.resource);
+            });
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setStringList('favourites', favouriteMediaPaths);
+            appWindow.close();
+          },
+        ),
       ],
     );
   }

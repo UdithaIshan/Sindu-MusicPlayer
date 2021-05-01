@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:file_selector_platform_interface/file_selector_platform_interface.dart';
@@ -23,8 +24,8 @@ void main() {
 
   doWhenWindowReady(() {
     final initialSize = Size(800, 600);
+    appWindow.maxSize = initialSize;
     appWindow.minSize = initialSize;
-    appWindow.size = initialSize;
     appWindow.title = 'PlayMe';
     appWindow.show();
   });
@@ -40,25 +41,25 @@ class _PlayMeState extends State<PlayMe> {
   int _selectedIndex = 0;
 
   // player configurations------------------------------------------------------
-  // CurrentState current = new CurrentState();
   PositionState position = new PositionState();
   PlaybackState playback = new PlaybackState();
-  // GeneralState general = new GeneralState();
   double currentVolume = 0.0;
   bool init = true;
   var metas;
+  List<Device> devices = <Device>[];
   //----------------------------------------------------------------------------
 
   IconData playButton = Icons.play_arrow;
   IconData favButton = Icons.favorite_outline;
   IconData volumeButton = Icons.volume_up_sharp;
-
+  IconData playListMode = Icons.repeat_sharp;
+  Color repeatColor = Colors.white;
 
   @override
   void didChangeDependencies() async {
     if (this.init) {
       super.didChangeDependencies();
-
+      this.devices = await Devices.all;
       // check persistent store for saved favourites
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String> favouriteMediaPaths = prefs.getStringList('favourites');
@@ -69,12 +70,19 @@ class _PlayMeState extends State<PlayMe> {
         });
       } catch (e) {}
 
-      this.currentVolume = Provider.of<PlayerData>(context, listen: false).player.general.volume;
-      Provider.of<PlayerData>(context, listen: false).player.positionStream?.listen((position) {
+      this.currentVolume =
+          Provider.of<PlayerData>(context, listen: false).player.general.volume;
+      Provider.of<PlayerData>(context, listen: false)
+          .player
+          .positionStream
+          ?.listen((position) {
         this.setState(() => this.position = position);
       });
 
-      Provider.of<PlayerData>(context, listen: false).player.playbackStream?.listen((playback) {
+      Provider.of<PlayerData>(context, listen: false)
+          .player
+          .playbackStream
+          ?.listen((playback) {
         if (playback.isPlaying) {
           playButton = Icons.pause;
           getMetas(Provider.of<PlayerData>(context, listen: false));
@@ -90,8 +98,14 @@ class _PlayMeState extends State<PlayMe> {
   }
 
   void _openMediaFile(BuildContext context, medias) async {
-    final mp3TypeGroup = XTypeGroup(label: 'MP3s', extensions: ['mp3'],);
-    final files = await FileSelectorPlatform.instance.openFiles(acceptedTypeGroups: [mp3TypeGroup,]);
+    final mp3TypeGroup = XTypeGroup(
+      label: 'MP3s',
+      extensions: ['mp3'],
+    );
+    final files =
+        await FileSelectorPlatform.instance.openFiles(acceptedTypeGroups: [
+      mp3TypeGroup,
+    ]);
 
     if (files.isNotEmpty) {
       medias.clear();
@@ -107,17 +121,13 @@ class _PlayMeState extends State<PlayMe> {
   void getMetas(PlayerData data) async {
     try {
       Media metasMedia = await Media.file(
-          new File(
-              data.playFavourites
-                  ? data
-                      .favs[data.player.current.index]
-                      .resource
-                  : data
-                      .medias[data.player.current.index]
-                      .resource),
+          new File(data.playFavourites
+              ? data.favs[data.player.current.index].resource
+              : data.medias[data.player.current.index].resource),
           parse: true);
       print('in meta ${data.player.current.index}');
-      var jsonString = JsonEncoder.withIndent('    ').convert(metasMedia?.metas);
+      var jsonString =
+          JsonEncoder.withIndent('    ').convert(metasMedia?.metas);
       this.metas = json.decode(jsonString);
       print(this.metas['artworkUrl']);
       // setState(() {});
@@ -128,7 +138,6 @@ class _PlayMeState extends State<PlayMe> {
 
   @override
   Widget build(BuildContext context) {
-
     var playerData = context.watch<PlayerData>();
 
     return Scaffold(
@@ -137,7 +146,7 @@ class _PlayMeState extends State<PlayMe> {
         width: 1,
         child: Column(
           children: [
-            Row(children: [LeftSide(), RightSide()]),
+            Row(children: [RightSide()]),
             Expanded(
               child: Row(
                 children: [
@@ -188,7 +197,9 @@ class _PlayMeState extends State<PlayMe> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  this.playback.isPlaying ? 'Now Playing' : 'Welcome to PlayMe',
+                                  this.playback.isPlaying
+                                      ? 'Now Playing'
+                                      : 'Welcome to PlayMe',
                                   style: TextStyle(
                                       fontSize: 30, fontFamily: 'Courgette'),
                                 ),
@@ -201,7 +212,11 @@ class _PlayMeState extends State<PlayMe> {
                                           borderRadius:
                                               BorderRadius.circular(500.0),
                                           child: Image.file(
-                                            File(metas != null ? Uri.decodeComponent(metas['artworkUrl']).replaceAll('file:///', '') : 'assets/images/Sindu.gif'),
+                                            File(metas != null
+                                                ? Uri.decodeComponent(
+                                                        metas['artworkUrl'])
+                                                    .replaceAll('file:///', '')
+                                                : 'assets/images/Sindu.gif'),
                                             width: 300,
                                             height: 300,
                                           )),
@@ -215,7 +230,9 @@ class _PlayMeState extends State<PlayMe> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              metas != null ? metas['title'] : 'PlayMe with your favourites!',
+                                              metas != null
+                                                  ? metas['title']
+                                                  : 'PlayMe with your favourites!',
                                               style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold),
@@ -224,7 +241,9 @@ class _PlayMeState extends State<PlayMe> {
                                               height: 19,
                                             ),
                                             Text(
-                                              metas != null ? metas['artist'] : '',
+                                              metas != null
+                                                  ? metas['artist']
+                                                  : '',
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
@@ -247,8 +266,7 @@ class _PlayMeState extends State<PlayMe> {
                                 ElevatedButton(
                                     child: const Text('Play Favourites'),
                                     onPressed: () {
-                                      playerData
-                                          .togglePlayFavourites(true);
+                                      playerData.togglePlayFavourites(true);
                                       playerData.player.open(
                                           new Playlist(medias: playerData.favs),
                                           autoStart: true);
@@ -257,19 +275,16 @@ class _PlayMeState extends State<PlayMe> {
                             ),
                             body: Container(
                               child: ListView.builder(
-                                  itemCount: playerData
-                                      .favs
-                                      .length,
+                                  itemCount: playerData.favs.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    if (playerData
-                                        .favs
-                                        .isEmpty) {
+                                    if (playerData.favs.isEmpty) {
                                       return null;
                                     }
                                     return ListTile(
                                       title: FutureBuilder(
-                                          future: Core.getNameOfThis(playerData.favs[index]),
+                                          future: Core.getNameOfThis(
+                                              playerData.favs[index]),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
                                               return Text(snapshot.data);
@@ -278,9 +293,13 @@ class _PlayMeState extends State<PlayMe> {
                                           }),
                                       trailing: IconButton(
                                         icon: Icon(
-                                            Icons.remove_circle_outline_sharp),
+                                          Icons.remove_circle_outline_sharp,
+                                        ),
+                                        splashRadius: 20,
+                                        tooltip: 'Remove from favourites',
                                         onPressed: () {
-                                          playerData.removeFavouritesByIndex(index);
+                                          playerData
+                                              .removeFavouritesByIndex(index);
                                           setState(() {});
                                         },
                                       ),
@@ -296,23 +315,27 @@ class _PlayMeState extends State<PlayMe> {
                               actions: [
                                 ElevatedButton(
                                   child: const Text('Open files'),
-                                  onPressed: () => _openMediaFile(context, playerData.medias),
+                                  onPressed: () => _openMediaFile(
+                                      context, playerData.medias),
                                 ),
                                 ElevatedButton(
                                     child: const Text('Play All'),
                                     onPressed: () {
                                       playerData.togglePlayFavourites(false);
-                                      playerData.player.open(new Playlist(medias: playerData.medias), autoStart: true);
+                                      playerData.player.open(
+                                          new Playlist(
+                                              medias: playerData.medias),
+                                          autoStart: true);
                                     }),
                               ],
                             ),
                             body: Container(
                                 child: ListView.builder(
                                     itemCount: playerData.medias.length,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return StatefulListTile(index: index);
-                                    })
-                            ),
+                                    })),
                           ),
                         ),
                         Container(
@@ -330,17 +353,33 @@ class _PlayMeState extends State<PlayMe> {
                                       child: Card(
                                         child: Column(
                                           children: [
-                                            Text('Set Playback Rate'),
+                                            SizedBox(
+                                              height: 25,
+                                            ),
+                                            Text(
+                                              'Set Playback Rate',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            SizedBox(
+                                              height: 50,
+                                            ),
                                             Text(
                                                 'Current Rate: ${playerData.player?.general?.rate ?? 1.0}'),
+                                            SizedBox(
+                                              height: 50,
+                                            ),
                                             Slider(
                                               min: 0.0,
                                               max: 2.0,
                                               divisions: 4,
-                                              value:
-                                              playerData.player?.general?.rate ?? 1.0,
+                                              value: playerData
+                                                      .player?.general?.rate ??
+                                                  1.0,
                                               onChanged: (value) {
-                                                playerData.player.setRate(value);
+                                                playerData.player
+                                                    .setRate(value);
                                               },
                                             ),
                                           ],
@@ -351,14 +390,47 @@ class _PlayMeState extends State<PlayMe> {
                                       width: 300,
                                       height: 300,
                                       child: Card(
-                                        child: Text('Coming Soon'),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 25,
+                                            ),
+                                            Text(
+                                              'Set Playback Device',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            SizedBox(
+                                              height: 50,
+                                            ),
+                                            Expanded(
+                                              child: ListView.builder(
+                                                  itemCount: this.devices != null ? this.devices.length : 0,
+                                                  itemBuilder: (context, index) {
+                                                    return ListTile(
+                                                      leading: Text('${index + 1}.'),
+                                                      title: Text(
+                                                        this.devices[index].name,
+                                                        style: TextStyle(
+                                                          fontSize: 14.0,
+                                                        ),
+                                                      ),
+                                                      onTap: () => playerData
+                                                          .player
+                                                          ?.setDevice(this.devices[index]),
+                                                    );
+                                                  }
+                                              ),
+                                            ),
+                                          ],
+                                        )
                                       ),
                                     ),
                                   ],
                                 ),
                               ],
-                            )
-                        ),
+                            )),
                       ],
                     ),
                   ),
@@ -367,6 +439,7 @@ class _PlayMeState extends State<PlayMe> {
             ),
             Divider(height: 1),
             Container(
+              padding: EdgeInsets.all(10),
                 height: 110.0,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -387,7 +460,7 @@ class _PlayMeState extends State<PlayMe> {
                               trackHeight: 4.0,
                               thumbColor: Colors.redAccent,
                               thumbShape: RoundSliderThumbShape(
-                                  enabledThumbRadius: 12.0),
+                                  enabledThumbRadius: 9.0),
                               overlayColor: Colors.red.withAlpha(32),
                               overlayShape:
                                   RoundSliderOverlayShape(overlayRadius: 10.0),
@@ -406,8 +479,8 @@ class _PlayMeState extends State<PlayMe> {
                                   .toDouble(),
                               onChanged: (value) {
                                 playerData.player.seek(
-                                      Duration(milliseconds: value.toInt()),
-                                    );
+                                  Duration(milliseconds: value.toInt()),
+                                );
                               },
                             ),
                           ),
@@ -416,8 +489,9 @@ class _PlayMeState extends State<PlayMe> {
                             this.position.duration.inSeconds)),
                       ],
                     ),
+                    SizedBox(height: 5,),
                     Row(
-                      // playback controllers
+
                       children: [
                         Expanded(
                           child: Row(
@@ -425,12 +499,45 @@ class _PlayMeState extends State<PlayMe> {
                             children: [
                               RawMaterialButton(
                                 constraints: BoxConstraints(maxWidth: 50),
+                                onPressed: () {
+                                  if(playerData.playlistMode == PlaylistMode.single) {
+                                    playerData.togglePlayListMode(PlaylistMode.repeat);
+                                    setState(() {
+                                      repeatColor = Colors.grey.shade400;
+                                      playListMode = Icons.repeat_one_sharp;
+                                    });
+                                  }
+                                  else if(playerData.playlistMode == PlaylistMode.repeat) {
+                                    playerData.togglePlayListMode(PlaylistMode.loop);
+                                    setState(() {
+                                      playListMode = Icons.repeat_sharp;
+                                    });
+                                  }
+                                  else if(playerData.playlistMode == PlaylistMode.loop) {
+                                    playerData.togglePlayListMode(PlaylistMode.single);
+                                    setState(() {
+                                      repeatColor = Colors.white;
+                                      playListMode = Icons.repeat_sharp;
+                                    });
+                                    }
+                                },
+                                elevation: 2.0,
+                                fillColor: repeatColor,
+                                child: Icon(
+                                  playListMode,
+                                  size: 20.0,
+                                ),
+                                padding: EdgeInsets.all(10.0),
+                                shape: CircleBorder(),
+                              ),
+                              RawMaterialButton(
+                                constraints: BoxConstraints(maxWidth: 50),
                                 onPressed: () => playerData.player.stop(),
                                 elevation: 2.0,
                                 fillColor: Colors.white,
                                 child: Icon(
-                                  FontAwesomeIcons.stop,
-                                  size: 15.0,
+                                  Icons.stop,
+                                  size: 20.0,
                                 ),
                                 padding: EdgeInsets.all(10.0),
                                 shape: CircleBorder(),
@@ -456,7 +563,8 @@ class _PlayMeState extends State<PlayMe> {
                             ),
                             RawMaterialButton(
                               onPressed: () {
-                                if (playerData.medias.isNotEmpty || playerData.favs.isNotEmpty) {
+                                if (playerData.medias.isNotEmpty ||
+                                    playerData.favs.isNotEmpty) {
                                   if (playback.isPlaying) {
                                     playerData.player.pause();
                                   } else {
@@ -495,10 +603,12 @@ class _PlayMeState extends State<PlayMe> {
                               IconButton(
                                 icon: Icon(volumeButton),
                                 iconSize: 25,
-                                color: Colors.blue,
+                                color: Colors.black,
+                                splashRadius: 20,
                                 onPressed: () {
                                   if (playerData.player.general.volume != 0.0) {
-                                    currentVolume = playerData.player.general.volume;
+                                    currentVolume =
+                                        playerData.player.general.volume;
                                     playerData.player.setVolume(0.0);
                                     setState(() {
                                       volumeButton = Icons.volume_off_sharp;
@@ -512,16 +622,30 @@ class _PlayMeState extends State<PlayMe> {
                                 },
                               ),
                               Container(
-                                width: 100,
+                                width: 125,
                                 height: 50,
-                                child: Slider(
-                                  min: 0.0,
-                                  max: 1.0,
-                                  divisions: 10,
-                                  value: playerData.player?.general?.volume ?? 0.5,
-                                  onChanged: (value) {
-                                    playerData.player.setVolume(value);
-                                  },
+                                child: SliderTheme(
+                                  data: SliderTheme.of(context).copyWith(
+                                    activeTrackColor: Colors.cyan[600],
+                                    inactiveTrackColor: Colors.cyan[100],
+                                    trackShape: RectangularSliderTrackShape(),
+                                    trackHeight: 4.0,
+                                    thumbColor: Colors.cyan,
+                                    thumbShape: RoundSliderThumbShape(
+                                        enabledThumbRadius: 8.0),
+                                    overlayColor: Colors.cyan.withAlpha(32),
+                                    overlayShape:
+                                    RoundSliderOverlayShape(overlayRadius: 10.0),
+                                  ),
+                                  child: Slider(
+                                    min: 0.0,
+                                    max: 1.0,
+                                    divisions: 10,
+                                    value: playerData.player?.general?.volume ?? 0.5,
+                                    onChanged: (value) {
+                                      playerData.player.setVolume(value);
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
@@ -529,6 +653,7 @@ class _PlayMeState extends State<PlayMe> {
                         )
                       ],
                     ),
+                    SizedBox(height: 5,),
                   ],
                 ))
           ],

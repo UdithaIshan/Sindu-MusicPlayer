@@ -2,6 +2,10 @@
 
 A Music Player
 
+
+MSIX
+https://www.advancedinstaller.com/install-test-certificate-from-msix.html
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

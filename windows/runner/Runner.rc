@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.byteengine" "\0"
-            VALUE "FileDescription", "A Music Player" "\0"
+            VALUE "CompanyName", "com.devstream" "\0"
+            VALUE "FileDescription", "PlayMe Music Player" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "sindu_player" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 com.byteengine. All rights reserved." "\0"
-            VALUE "OriginalFilename", "sindu_player.exe" "\0"
-            VALUE "ProductName", "sindu_player" "\0"
+            VALUE "InternalName", "PlayMe" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2021 Uditha Ishan. All rights reserved." "\0"
+            VALUE "OriginalFilename", "play_me.exe" "\0"
+            VALUE "ProductName", "PlayMe" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

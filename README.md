@@ -3,7 +3,7 @@
 
 [![Logo](https://github.com/UdithaIshan/playMe/blob/screenshots/screenshots/PlayMeLogo.png)]()
 
-PlayMe is a multi platform desktop music player🎶
+PlayMe is a multi-platform desktop music player that created using Flutter🎶
 
 ## Screenshots
 <p> <img height=250px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/1.png">  <img height=250px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/2.png"></p>
@@ -31,7 +31,3 @@ create a new branch and make a pull request.
 GPLv3
 
 **Free Software, Hell Yeah!**
-
-
-
-

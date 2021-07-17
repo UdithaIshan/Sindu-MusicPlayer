@@ -221,7 +221,7 @@ class _PlayMeState extends State<PlayMe> {
                                       child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(500.0),
-                                          child: metas != null ? Image.file(
+                                          child: metas['artworkUrl'] != null ? Image.file(
                                             File(Uri.decodeComponent(
                                                         metas['artworkUrl'])
                                                     .replaceAll('file:///', '')
@@ -245,7 +245,7 @@ class _PlayMeState extends State<PlayMe> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              metas != null
+                                              metas['title'] != null
                                                   ? metas['title']
                                                   : 'PlayMe with your favourites!',
                                               style: TextStyle(

@@ -1,19 +1,37 @@
 # PlayMe
+### _PlayMe with your favourites_
 
-A Music Player for Windows and Linux platform
+[![Logo](https://github.com/UdithaIshan/playMe/blob/screenshots/screenshots/PlayMeLogo.png)]()
+
+PlayMe is a multi platform desktop music player🎶
+
+## Screenshots
+<p> <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/1.png">  <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/2.png"></p>
+<p> <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/3.png">  <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/4.png">
+
+## Installation
+
+**``Currenlty available only for the Windows 10``**
+
+- Download the PlayMe MSIX package.
+[Download](https://mega.nz/file/IV1GEJBS#zVe3EPivPciUGgzOyl_zvtllbNS0Zw0raTKKmVqY0Es)
+
+- Install MXSIX test certificate.
+[Step by step guide](https://www.advancedinstaller.com/install-test-certificate-from-msix.html)
+
+- Install the package
+
+## Development
+
+Want to contribute? **Great**! 🔥
+create a new branch and make a pull request.
+
+## License
+
+GPLv3
+
+**Free Software, Hell Yeah!**
 
 
-## Getting Started
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/1.png">
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/2.png">
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/3.png">
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/4.png">
-
-
-## Installation Guide
-### Currently available for Windows 10 only
-[Download playMe](https://mega.nz/file/IV1GEJBS#zVe3EPivPciUGgzOyl_zvtllbNS0Zw0raTKKmVqY0Es)
-Before the installation, need to install Digital Certificate that comes with the playMe.
-[Certificate Installation Guide](https://www.advancedinstaller.com/install-test-certificate-from-msix.html)
 
 

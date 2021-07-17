@@ -4,10 +4,10 @@ A Music Player for Windows and Linux platform
 
 
 ## Getting Started
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/1.png">
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/2.png">
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/3.png">
-<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/4.png">
+<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/1.png">
+<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/2.png">
+<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/3.png">
+<img src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/4.png">
 
 
 ## Installation Guide

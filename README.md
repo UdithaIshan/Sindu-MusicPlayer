@@ -14,12 +14,10 @@ PlayMe is a multi-platform desktop music player that created using Flutter🎶
 **``Currenlty available only for the Windows 10``**
 
 - Download the PlayMe MSIX package.
-  
-[Download](https://mega.nz/file/IV1GEJBS#zVe3EPivPciUGgzOyl_zvtllbNS0Zw0raTKKmVqY0Es)
+  [Download](https://mega.nz/file/IV1GEJBS#zVe3EPivPciUGgzOyl_zvtllbNS0Zw0raTKKmVqY0Es)
 
 - Install MXSIX test certificate.
-  
-[Step by step guide](https://www.advancedinstaller.com/install-test-certificate-from-msix.html)
+  [Step by step guide](https://www.advancedinstaller.com/install-test-certificate-from-msix.html)
 
 - Install the package
 

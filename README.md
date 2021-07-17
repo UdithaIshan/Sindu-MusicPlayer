@@ -24,6 +24,7 @@ PlayMe is a multi-platform desktop music player that created using Flutter🎶
 ## Development
 
 Want to contribute? **Great**! 🔥
+  
 create a new branch and make a pull request.
 
 ## License

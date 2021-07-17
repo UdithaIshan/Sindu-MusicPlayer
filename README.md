@@ -6,8 +6,8 @@
 PlayMe is a multi platform desktop music player🎶
 
 ## Screenshots
-<p> <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/1.png">  <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/2.png"></p>
-<p> <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/3.png">  <img height=350px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/4.png">
+<p> <img height=250px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/1.png">  <img height=250px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/2.png"></p>
+<p> <img height=250px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/3.png">  <img height=250px src="https://github.com/UdithaIshan/play-me/blob/screenshots/screenshots/4.png">
 
 ## Installation
 
